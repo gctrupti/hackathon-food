@@ -37,7 +37,7 @@ function App() {
   const [authorized, setAuthorized] = useState(false);
   const [pass, setPass] = useState("");
 
-  const ADMIN_PASS = "hackathon123";
+  const ADMIN_PASS = "12345678";
 
   const login = () => {
     if (pass === ADMIN_PASS) {
