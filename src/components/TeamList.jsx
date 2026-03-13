@@ -6,6 +6,7 @@ import { QRCodeCanvas } from "qrcode.react";
 function TeamList() {
 
   const [teams, setTeams] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
 
@@ -44,24 +45,36 @@ function TeamList() {
 
   };
 
+  // Filter teams based on search
+  const filteredTeams = teams.filter((team) =>
+    team.teamName.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
 
     <div style={{ padding: "30px" }}>
 
-      <h2>Registered Teams</h2>
+      <h2 className="text-lg font-semibold mb-3">Registered Teams</h2>
 
-      {teams.map((team) => (
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search team name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border p-2 w-full mb-4 rounded"
+      />
+
+      {filteredTeams.map((team) => (
 
         <div
- key={team.id}
- className="bg-gray-50 border rounded-lg p-4 shadow-sm mb-4"
->
+          key={team.id}
+          className="bg-gray-50 border rounded-lg p-4 shadow-sm mb-4"
+        >
 
-        
+          <h3 className="font-semibold">{team.teamName}</h3>
 
-          <h3>{team.teamName}</h3>
-
-          <p>
+          <p className="text-sm text-gray-600 mb-2">
             {team.members.map(member => member.name).join(", ")}
           </p>
 
@@ -74,12 +87,11 @@ function TeamList() {
           <br /><br />
 
           <button
- onClick={() => downloadQR(team.id, team.teamName)}
- className="mt-3 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
->
- Download QR
-</button>
-
+            onClick={() => downloadQR(team.id, team.teamName)}
+            className="mt-3 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+          >
+            Download QR
+          </button>
 
         </div>
 
@@ -90,4 +102,4 @@ function TeamList() {
   );
 }
 
-export default TeamList;
+export default TeamList;git add .
