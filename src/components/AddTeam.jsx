@@ -32,56 +32,50 @@ function AddTeam() {
   };
 
   return (
-    <div style={{padding:"30px"}}>
+  <div>
+    <h2 className="text-lg font-semibold mb-4">Register Team</h2>
 
-      <h2>Hackathon Team Registration</h2>
+    <input
+      className="border p-2 w-full mb-3 rounded"
+      placeholder="Team Name"
+      value={teamName}
+      onChange={(e)=>setTeamName(e.target.value)}
+    />
 
-      <input
-        placeholder="Team Name"
-        value={teamName}
-        onChange={(e)=>setTeamName(e.target.value)}
-      />
+    <input
+      className="border p-2 w-full mb-3 rounded"
+      placeholder="Member 1"
+      value={member1}
+      onChange={(e)=>setMember1(e.target.value)}
+    />
 
-      <br/><br/>
+    <input
+      className="border p-2 w-full mb-3 rounded"
+      placeholder="Member 2"
+      value={member2}
+      onChange={(e)=>setMember2(e.target.value)}
+    />
 
-      <input
-        placeholder="Member 1"
-        value={member1}
-        onChange={(e)=>setMember1(e.target.value)}
-      />
+    <input
+      className="border p-2 w-full mb-3 rounded"
+      placeholder="Member 3"
+      value={member3}
+      onChange={(e)=>setMember3(e.target.value)}
+    />
 
-      <br/><br/>
+    <input
+      className="border p-2 w-full mb-3 rounded"
+      placeholder="Member 4"
+      value={member4}
+      onChange={(e)=>setMember4(e.target.value)}
+    />
 
-      <input
-        placeholder="Member 2"
-        value={member2}
-        onChange={(e)=>setMember2(e.target.value)}
-      />
-
-      <br/><br/>
-
-      <input
-        placeholder="Member 3"
-        value={member3}
-        onChange={(e)=>setMember3(e.target.value)}
-      />
-
-      <br/><br/>
-
-      <input
-        placeholder="Member 4"
-        value={member4}
-        onChange={(e)=>setMember4(e.target.value)}
-      />
-
-      <br/><br/>
-
-      <button onClick={addTeam}>
-        Add Team
-      </button>
-
-    </div>
-  );
+    <button
+      onClick={addTeam}
+      className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
+    >
+      Add Team
+    </button>
+  </div>
+);
 }
-
-export default AddTeam;

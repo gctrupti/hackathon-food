@@ -1,32 +1,32 @@
 import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
-import TeamPage from "./components/TeamPage";
-
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
-
   return (
+    <div className="min-h-screen bg-gray-100">
 
-    <BrowserRouter>
+      <header className="bg-indigo-600 text-white p-4 text-xl font-semibold">
+        Hackathon Food Dashboard
+      </header>
 
-      <Routes>
+      <div className="max-w-5xl mx-auto p-6">
 
-        <Route path="/" element={
-          <>
+        <div className="grid md:grid-cols-2 gap-6">
+
+          <div className="bg-white p-6 rounded-xl shadow">
             <AddTeam />
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow">
             <TeamList />
-          </>
-        } />
+          </div>
 
-        <Route path="/team/:id" element={<TeamPage />} />
+        </div>
 
-      </Routes>
+      </div>
 
-    </BrowserRouter>
-
+    </div>
   );
-
 }
 
 export default App;

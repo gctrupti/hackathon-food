@@ -53,13 +53,11 @@ function TeamList() {
       {teams.map((team) => (
 
         <div
-          key={team.id}
-          style={{
-            border: "1px solid black",
-            padding: "20px",
-            marginBottom: "20px"
-          }}
-        >
+ key={team.id}
+ className="bg-gray-50 border rounded-lg p-4 shadow-sm mb-4"
+>
+
+        
 
           <h3>{team.teamName}</h3>
 
@@ -75,9 +73,13 @@ function TeamList() {
 
           <br /><br />
 
-          <button onClick={() => downloadQR(team.id, team.teamName)}>
-            Download QR
-          </button>
+          <button
+ onClick={() => downloadQR(team.id, team.teamName)}
+ className="mt-3 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+>
+ Download QR
+</button>
+
 
         </div>
 
