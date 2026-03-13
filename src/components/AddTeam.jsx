@@ -79,3 +79,5 @@ function AddTeam() {
   </div>
 );
 }
+
+export default AddTeam;
