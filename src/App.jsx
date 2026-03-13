@@ -1,7 +1,9 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
+import TeamPage from "./components/TeamPage";
 
-function App() {
+function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
 
@@ -26,6 +28,20 @@ function App() {
       </div>
 
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        <Route path="/" element={<Dashboard />} />
+
+        <Route path="/team/:id" element={<TeamPage />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 
