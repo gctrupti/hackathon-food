@@ -102,4 +102,4 @@ function TeamList() {
   );
 }
 
-export default TeamList;git add .
+export default TeamList;
