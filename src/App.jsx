@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
 import TeamPage from "./components/TeamPage";
+import { useState } from "react";
 
 function Dashboard() {
   return (
@@ -32,15 +33,61 @@ function Dashboard() {
 }
 
 function App() {
+
+  const [authorized, setAuthorized] = useState(false);
+  const [pass, setPass] = useState("");
+
+  const ADMIN_PASS = "hackathon123";
+
+  const login = () => {
+    if (pass === ADMIN_PASS) {
+      setAuthorized(true);
+    } else {
+      alert("Wrong passcode");
+    }
+  };
+
+  const LoginScreen = () => (
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded shadow text-center">
+
+        <h2 className="text-xl mb-4">Organizer Access</h2>
+
+        <input
+          type="password"
+          placeholder="Enter passcode"
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+
+        <button
+          onClick={login}
+          className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded"
+        >
+          Unlock Dashboard
+        </button>
+
+      </div>
+    </div>
+  );
+
   return (
     <BrowserRouter>
+
       <Routes>
 
-        <Route path="/" element={<Dashboard />} />
+        {/* Protected Dashboard */}
+        <Route
+          path="/"
+          element={authorized ? <Dashboard /> : <LoginScreen />}
+        />
 
+        {/* Public Team Page */}
         <Route path="/team/:id" element={<TeamPage />} />
 
       </Routes>
+
     </BrowserRouter>
   );
 }
