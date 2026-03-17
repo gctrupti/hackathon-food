@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { QRCodeCanvas } from "qrcode.react";
 
 function TeamList() {
@@ -8,23 +8,21 @@ function TeamList() {
   const [teams, setTeams] = useState([]);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
+ useEffect(() => {
 
-    const fetchTeams = async () => {
+  const unsubscribe = onSnapshot(collection(db, "teams"), (snapshot) => {
 
-      const querySnapshot = await getDocs(collection(db, "teams"));
+    const teamArray = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }));
 
-      const teamArray = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+    setTeams(teamArray);
+  });
 
-      setTeams(teamArray);
-    };
+  return () => unsubscribe();
 
-    fetchTeams();
-
-  }, []);
+}, []);
 
   const downloadQR = (teamId, teamName) => {
 

@@ -4,50 +4,10 @@ import TeamList from "./components/TeamList";
 import TeamPage from "./components/TeamPage";
 import { useState } from "react";
 
-function Dashboard() {
+
+// ✅ MOVE THIS OUTSIDE App()
+function LoginScreen({ pass, setPass, login }) {
   return (
-    <div className="min-h-screen bg-gray-100">
-
-      <header className="bg-indigo-600 text-white p-4 text-xl font-semibold">
-        Hackathon Food Dashboard
-      </header>
-
-      <div className="max-w-5xl mx-auto p-6">
-
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            <AddTeam />
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow">
-            <TeamList />
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
-}
-
-function App() {
-
-  const [authorized, setAuthorized] = useState(false);
-  const [pass, setPass] = useState("");
-
-  const ADMIN_PASS = "12345678";
-
-  const login = () => {
-    if (pass === ADMIN_PASS) {
-      setAuthorized(true);
-    } else {
-      alert("Wrong passcode");
-    }
-  };
-
-  const LoginScreen = () => (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded shadow text-center">
 
@@ -71,7 +31,54 @@ function App() {
       </div>
     </div>
   );
+}
 
+
+// Dashboard stays same
+function Dashboard() {
+  return (
+    <div className="min-h-screen bg-gray-100">
+
+      <header className="bg-indigo-600 text-white p-4 text-xl font-semibold">
+        Hackathon Food Coupon Dashboard
+      </header>
+
+      <div className="max-w-5xl mx-auto p-6">
+
+        <div className="grid md:grid-cols-2 gap-6">
+
+          <div className="bg-white p-6 rounded-xl shadow">
+            <AddTeam />
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow">
+            <TeamList />
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+
+function App() {
+
+  const [authorized, setAuthorized] = useState(false);
+  const [pass, setPass] = useState("");
+
+  const ADMIN_PASS = "12345678";
+
+  const login = () => {
+  if (pass === ADMIN_PASS) {
+    setAuthorized(true);
+    localStorage.setItem("auth", "true"); // ✅ save login
+  } else {
+    alert("Wrong passcode");
+  }
+};
   return (
     <BrowserRouter>
 
@@ -80,7 +87,11 @@ function App() {
         {/* Protected Dashboard */}
         <Route
           path="/"
-          element={authorized ? <Dashboard /> : <LoginScreen />}
+          element={
+            authorized
+              ? <Dashboard />
+              : <LoginScreen pass={pass} setPass={setPass} login={login} />
+          }
         />
 
         {/* Public Team Page */}
