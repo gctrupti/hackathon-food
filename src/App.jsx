@@ -3,6 +3,7 @@ import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
 import TeamPage from "./components/TeamPage";
 import { useState } from "react";
+import Scanner from "./components/Scanner";
 
 
 // ✅ MOVE THIS OUTSIDE App()
@@ -38,10 +39,20 @@ function LoginScreen({ pass, setPass, login }) {
 function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-100">
+<header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
 
-      <header className="bg-indigo-600 text-white p-4 text-xl font-semibold">
-        Hackathon Food Coupon Dashboard
-      </header>
+  <h1 className="text-xl font-semibold">
+    Hackathon Food Dashboard
+  </h1>
+
+  <button
+    onClick={() => navigate("/scanner")}
+    className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+  >
+    Scan QR
+  </button>
+
+</header>
 
       <div className="max-w-5xl mx-auto p-6">
 
@@ -96,7 +107,7 @@ function App() {
 
         {/* Public Team Page */}
         <Route path="/team/:id" element={<TeamPage />} />
-
+<Route path="/scanner" element={<Scanner />} />
       </Routes>
 
     </BrowserRouter>
