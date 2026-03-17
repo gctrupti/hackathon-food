@@ -147,12 +147,7 @@ function TeamPage() {
               {member.name}
             </h3>
 
-            {/* Always visible status */}
-            <p className="text-sm text-gray-600">
-              Breakfast: {member.breakfast ? "✅" : "❌"} |
-              Lunch: {member.lunch ? "✅" : "❌"} |
-              Dinner: {member.dinner ? "✅" : "❌"}
-            </p>
+           
 
             {/* 🔒 Buttons only for coordinators */}
             {authorized && (
