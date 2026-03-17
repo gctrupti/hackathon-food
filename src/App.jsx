@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
 import TeamPage from "./components/TeamPage";
-import { useState } from "react";
 import Scanner from "./components/Scanner";
+import { useState } from "react";
 
 
-// ✅ MOVE THIS OUTSIDE App()
+// ✅ Login Screen (outside App)
 function LoginScreen({ pass, setPass, login }) {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -35,24 +35,28 @@ function LoginScreen({ pass, setPass, login }) {
 }
 
 
-// Dashboard stays same
+// ✅ Dashboard (FIXED)
 function Dashboard() {
+
+  const navigate = useNavigate(); // 🔥 THIS WAS MISSING
+
   return (
     <div className="min-h-screen bg-gray-100">
-<header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
 
-  <h1 className="text-xl font-semibold">
-    Hackathon Food Dashboard
-  </h1>
+      <header className="bg-indigo-600 text-white p-4 flex justify-between items-center">
 
-  <button
-    onClick={() => navigate("/scanner")}
-    className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
-  >
-    Scan QR
-  </button>
+        <h1 className="text-xl font-semibold">
+          Hackathon Food Dashboard
+        </h1>
 
-</header>
+        <button
+          onClick={() => navigate("/scanner")}
+          className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+        >
+          Scan QR
+        </button>
+
+      </header>
 
       <div className="max-w-5xl mx-auto p-6">
 
@@ -77,19 +81,23 @@ function Dashboard() {
 
 function App() {
 
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized, setAuthorized] = useState(
+    localStorage.getItem("auth") === "true" // ✅ persist login
+  );
+
   const [pass, setPass] = useState("");
 
   const ADMIN_PASS = "12345678";
 
   const login = () => {
-  if (pass === ADMIN_PASS) {
-    setAuthorized(true);
-    localStorage.setItem("auth", "true"); // ✅ save login
-  } else {
-    alert("Wrong passcode");
-  }
-};
+    if (pass === ADMIN_PASS) {
+      setAuthorized(true);
+      localStorage.setItem("auth", "true");
+    } else {
+      alert("Wrong passcode");
+    }
+  };
+
   return (
     <BrowserRouter>
 
@@ -105,9 +113,12 @@ function App() {
           }
         />
 
-        {/* Public Team Page */}
+        {/* Team Page */}
         <Route path="/team/:id" element={<TeamPage />} />
-<Route path="/scanner" element={<Scanner />} />
+
+        {/* Scanner */}
+        <Route path="/scanner" element={<Scanner />} />
+
       </Routes>
 
     </BrowserRouter>
