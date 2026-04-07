@@ -3,10 +3,11 @@ import AddTeam from "./components/AddTeam";
 import TeamList from "./components/TeamList";
 import TeamPage from "./components/TeamPage";
 import Scanner from "./components/Scanner";
+import { uploadTeams } from "./addTeams"; // ✅ FIXED IMPORT
 import { useState } from "react";
 
 
-// ✅ Login Screen (outside App)
+// ✅ Login Screen
 function LoginScreen({ pass, setPass, login }) {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -35,10 +36,10 @@ function LoginScreen({ pass, setPass, login }) {
 }
 
 
-// ✅ Dashboard (FIXED)
+// ✅ Dashboard
 function Dashboard() {
 
-  const navigate = useNavigate(); // 🔥 THIS WAS MISSING
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -49,12 +50,25 @@ function Dashboard() {
           Hackathon Food Dashboard
         </h1>
 
-        <button
-          onClick={() => navigate("/scanner")}
-          className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
-        >
-          Scan QR
-        </button>
+        <div className="flex gap-3">
+
+          {/* 🔥 TEMP BUTTON (UPLOAD TEAMS) */}
+          <button
+            onClick={uploadTeams}
+            className="bg-red-500 px-3 py-2 rounded"
+          >
+            Upload
+          </button>
+
+          {/* Scanner */}
+          <button
+            onClick={() => navigate("/scanner")}
+            className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+          >
+            Scan QR
+          </button>
+
+        </div>
 
       </header>
 
@@ -82,7 +96,7 @@ function Dashboard() {
 function App() {
 
   const [authorized, setAuthorized] = useState(
-    localStorage.getItem("auth") === "true" // ✅ persist login
+    localStorage.getItem("auth") === "true"
   );
 
   const [pass, setPass] = useState("");
@@ -103,7 +117,6 @@ function App() {
 
       <Routes>
 
-        {/* Protected Dashboard */}
         <Route
           path="/"
           element={
@@ -113,10 +126,8 @@ function App() {
           }
         />
 
-        {/* Team Page */}
         <Route path="/team/:id" element={<TeamPage />} />
 
-        {/* Scanner */}
         <Route path="/scanner" element={<Scanner />} />
 
       </Routes>

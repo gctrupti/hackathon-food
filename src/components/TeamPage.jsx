@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 
 function TeamPage() {
@@ -9,7 +9,7 @@ function TeamPage() {
 
   const [team, setTeam] = useState(null);
 
-  // 🔐 Coordinator auth with expiry check
+  // 🔐 Auth with expiry
   const [authorized, setAuthorized] = useState(() => {
     const auth = localStorage.getItem("auth");
     const expiry = localStorage.getItem("authExpiry");
@@ -24,7 +24,6 @@ function TeamPage() {
   });
 
   const [pass, setPass] = useState("");
-
   const ADMIN_PASS = "12345678";
 
   const logout = () => {
@@ -38,7 +37,7 @@ function TeamPage() {
     if (pass === ADMIN_PASS) {
       setAuthorized(true);
 
-      const expiryTime = Date.now() + 15 * 60 * 1000; // 15 minutes
+      const expiryTime = Date.now() + 15 * 60 * 1000;
       localStorage.setItem("auth", "true");
       localStorage.setItem("authExpiry", expiryTime);
     } else {
@@ -46,7 +45,7 @@ function TeamPage() {
     }
   };
 
-  // ⏳ Auto logout timer
+  // ⏳ Auto logout
   useEffect(() => {
     const expiry = localStorage.getItem("authExpiry");
 
@@ -56,26 +55,23 @@ function TeamPage() {
       if (remainingTime <= 0) {
         logout();
       } else {
-        const timer = setTimeout(() => {
-          logout();
-        }, remainingTime);
-
+        const timer = setTimeout(logout, remainingTime);
         return () => clearTimeout(timer);
       }
     }
   }, []);
 
+  // 🔥 REAL-TIME TEAM FETCH (FIXED)
   useEffect(() => {
-    const fetchTeam = async () => {
-      const teamRef = doc(db, "teams", id);
-      const snap = await getDoc(teamRef);
+    const teamRef = doc(db, "teams", id);
 
+    const unsubscribe = onSnapshot(teamRef, (snap) => {
       if (snap.exists()) {
         setTeam(snap.data());
       }
-    };
+    });
 
-    fetchTeam();
+    return () => unsubscribe();
   }, [id]);
 
   const redeemMeal = async (memberIndex, meal) => {
@@ -85,12 +81,7 @@ function TeamPage() {
     const teamRef = doc(db, "teams", id);
 
     await updateDoc(teamRef, {
-      members: updatedMembers
-    });
-
-    setTeam({
-      ...team,
-      members: updatedMembers
+      members: updatedMembers,
     });
   };
 
@@ -99,13 +90,10 @@ function TeamPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      {/* 🔐 Login box */}
+      {/* 🔐 Login */}
       {!authorized && (
         <div className="max-w-xl mx-auto mb-4 p-4 bg-yellow-100 rounded text-center">
-
-          <p className="mb-2 font-medium">
-            Coordinator Access Required
-          </p>
+          <p className="mb-2 font-medium">Coordinator Access Required</p>
 
           <input
             type="password"
@@ -121,11 +109,10 @@ function TeamPage() {
           >
             Unlock
           </button>
-
         </div>
       )}
 
-      {/* Team Header */}
+      {/* Header */}
       <div className="max-w-xl mx-auto mb-6 text-center">
         <h1 className="text-3xl font-bold text-indigo-600">
           {team.teamName}
@@ -133,23 +120,15 @@ function TeamPage() {
         <p className="text-gray-500">Team Members</p>
       </div>
 
-      {/* Member Cards */}
+      {/* Members */}
       <div className="max-w-xl mx-auto space-y-4">
-
-        {team.members.map((member, index) => (
-
+        {team.members?.map((member, index) => (
           <div
             key={index}
             className="bg-white p-5 rounded-xl shadow flex flex-col gap-3"
           >
+            <h3 className="text-lg font-semibold">{member.name}</h3>
 
-            <h3 className="text-lg font-semibold">
-              {member.name}
-            </h3>
-
-           
-
-            {/* 🔒 Buttons only for coordinators */}
             {authorized && (
               <div className="flex gap-3 flex-wrap">
 
@@ -188,14 +167,11 @@ function TeamPage() {
 
               </div>
             )}
-
           </div>
-
         ))}
-
       </div>
 
-      {/* ✅ DONE BUTTON */}
+      {/* NEXT BUTTON */}
       {authorized && (
         <div className="text-center mt-6">
           <button
@@ -206,7 +182,6 @@ function TeamPage() {
           </button>
         </div>
       )}
-
     </div>
   );
 }
