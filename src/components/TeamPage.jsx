@@ -24,7 +24,7 @@ function TeamPage() {
   });
 
   const [pass, setPass] = useState("");
-  const ADMIN_PASS = "12345678";
+  const ADMIN_PASS = "123456v3";
 
   const logout = () => {
     localStorage.removeItem("auth");
@@ -61,7 +61,7 @@ function TeamPage() {
     }
   }, []);
 
-  // 🔥 REAL-TIME TEAM FETCH (FIXED)
+  // 🔥 REAL-TIME FETCH
   useEffect(() => {
     const teamRef = doc(db, "teams", id);
 
@@ -74,13 +74,25 @@ function TeamPage() {
     return () => unsubscribe();
   }, [id]);
 
+  // 🔥 UPDATED LOGIC (COUNT BASED)
   const redeemMeal = async (memberIndex, meal) => {
+
+    const limits = {
+      breakfast: 1,
+      lunch: 2,
+      dinner: 1
+    };
+
     const updatedMembers = [...team.members];
-    updatedMembers[memberIndex][meal] = true;
 
-    const teamRef = doc(db, "teams", id);
+    if (updatedMembers[memberIndex][meal] >= limits[meal]) {
+      alert("Limit reached");
+      return;
+    }
 
-    await updateDoc(teamRef, {
+    updatedMembers[memberIndex][meal] += 1;
+
+    await updateDoc(doc(db, "teams", id), {
       members: updatedMembers,
     });
   };
@@ -132,37 +144,40 @@ function TeamPage() {
             {authorized && (
               <div className="flex gap-3 flex-wrap">
 
+                {/* Breakfast */}
                 <button
-                  disabled={member.breakfast}
+                  disabled={member.breakfast >= 1}
                   onClick={() => redeemMeal(index, "breakfast")}
                   className={`px-3 py-1 rounded 
-                  ${member.breakfast
+                  ${member.breakfast >= 1
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 hover:bg-gray-300"}`}
                 >
-                  Breakfast {member.breakfast && "✓"}
+                  Breakfast ({member.breakfast}/1)
                 </button>
 
+                {/* Lunch */}
                 <button
-                  disabled={member.lunch}
+                  disabled={member.lunch >= 2}
                   onClick={() => redeemMeal(index, "lunch")}
                   className={`px-3 py-1 rounded 
-                  ${member.lunch
+                  ${member.lunch >= 2
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 hover:bg-gray-300"}`}
                 >
-                  Lunch {member.lunch && "✓"}
+                  Lunch ({member.lunch}/2)
                 </button>
 
+                {/* Dinner */}
                 <button
-                  disabled={member.dinner}
+                  disabled={member.dinner >= 1}
                   onClick={() => redeemMeal(index, "dinner")}
                   className={`px-3 py-1 rounded 
-                  ${member.dinner
+                  ${member.dinner >= 1
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 hover:bg-gray-300"}`}
                 >
-                  Dinner {member.dinner && "✓"}
+                  Dinner ({member.dinner}/1)
                 </button>
 
               </div>

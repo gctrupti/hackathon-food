@@ -13,7 +13,7 @@ const teams = [
 
   { teamName: "BinaryBrains", members: ["Hamsa B M","Harshith Raj","Murali Mithun","Mahima"] },
   { teamName: "Algorithmics", members: ["Fathima Saarrah","Ashly Pereira","Divya Krishan","Daanya Tazmeen"] },
-  { teamName: "Vervain", members: ["Riya Pandey","Naziya Hasan","Anisha Tasnim","Syeda Zara"] },
+  { teamName: "Vervain", members: ["Naziya Hasan","Anisha Tasnim","Syeda Zara"] },
   { teamName: "Crib exchanges", members: ["Shashank Ural","Chetan BN","Kesara B S","Sreenivas SB"] },
   { teamName: "Team Dhurandhar", members: ["Ishika Singh","Krishnan Prashant","Debjit Paul","Ansh Saini"] },
   { teamName: "4code", members: ["Punith P","Pranav Shastri","Pranav CM","MD Sufiyaan"] },
@@ -35,8 +35,38 @@ const teams = [
   { teamName: "CodeShinobis", members: ["Prathibha","Rakshith","Tejaswini","Swathi"] },
   { teamName: "VitalSync", members: ["Anirudh","Shashank","Chaitanya","Manu"] },
   { teamName: "INNOVISION", members: ["Shivanshu","Shreya","Shruti"] },
-  { teamName: "VISIONAUTS", members: ["A Ashmitha Stephen"] },
+  { teamName: "VISIONAUTS", members: ["A Ashmitha Stephen", "Laikha Begum","Cyrus Santhosh","Krithik J"] },
+  {
+  teamName: "WAKANDA'S VISION",
+  members: ["ABHISHEK N", "KAUSHIK M"]
+},
+// 🔥 FINAL ADDITIONS
 
+{ 
+  teamName: "Code crafters", 
+  members: ["Dhyan J Patgar","C K Ashok Kumar","Hrushikesh S","Dheekshith A"] 
+},
+
+{ 
+  teamName: "RRCE auralyx", 
+  members: ["Mallikarjun Karakal","M Dhanush","Namith DS","NaveenKumar N"] 
+},
+
+{ 
+  teamName: "Solace", 
+  members: ["Preetam E Hosamani","HEMANTH KUMAR R",] 
+},
+
+{ 
+  teamName: "Chokepoint", 
+  members: ["Abhinav Singh","Aditya Tripathi ","Jigisha Singh","SHACHI PRADHAN"] 
+},
+
+// ⚠️ ONLY add if not already present
+{ 
+  teamName: "Tech kannadigas", 
+  members: ["Sarita","Shilpa","Pranav","Chandana"] 
+},
 
   { teamName: "VulnixAI", members: ["Dinesh","Sabari","Prakash","Robert"] },
   { teamName: "CodeVortex", members: ["Amogh","Suhana","Abdul","Thejas"] },
@@ -48,23 +78,26 @@ const teams = [
   { teamName: "SheSquad", members: ["Vaishnavi","Sakshi","Saraswati","Ramya"] },
   { teamName: "Hackoholics", members: ["Anup","Anushka","Apeksha","Manjunath"] },
   { teamName: "Triveni", members: ["Aryan","Vijay","Sufiya"] },
-  { teamName: "VibeCoders", members: ["Adithya"] },
+  { teamName: "VibeCoders", members: ["Adithya Kumar","Kamakhya Anupam Sharma","Damarasinghu Harshavardhan","Kartikey Varshney"] },
   { teamName: "Code Blazers", members: ["Zeeshan","Udhayapriyan","Sivaprakash","Rhuthudev"] }
 ];
-
 const formatTeam = (team) => ({
   teamName: team.teamName,
   members: team.members.map(name => ({
     name,
-    breakfast: false,
-    lunch: false,
-    dinner: false
+    breakfast: 0,   // ✅ changed
+    lunch: 0,       // ✅ changed
+    dinner: 0       // ✅ changed
   }))
 });
 
 export const uploadTeams = async () => {
   for (let team of teams) {
-    const id = team.teamName.toLowerCase().replace(/\s+/g, "_");
+    const id = team.teamName
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_]/g, ""); // ✅ safer ID
 
     await setDoc(doc(db, "teams", id), formatTeam(team));
     console.log("Added:", team.teamName);

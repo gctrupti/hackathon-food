@@ -101,7 +101,7 @@ function App() {
 
   const [pass, setPass] = useState("");
 
-  const ADMIN_PASS = "12345678";
+  const ADMIN_PASS = "123456v3";
 
   const login = () => {
     if (pass === ADMIN_PASS) {
